@@ -292,7 +292,7 @@ function mostPointsScored() {
   }
   for (let i = 0; i < player.length; i++) {
     if (numPointsScored(player[i]) === Math.max(...arr)) {
-      arrPlayer = player[i];
+      mostPointPlayer = player[i];
     }
   }
   return mostPointPlayer;
