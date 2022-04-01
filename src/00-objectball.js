@@ -169,7 +169,6 @@ function playerNumbers(tamName) {
   let newArr = [];
   for (let gameKey in game) {
     let teamObj = game[gameKey];
-    // console.log(teamObj)
     let data = teamObj.teamName;
 
     if (data === tamName) {
@@ -196,7 +195,7 @@ function playerStats(plyName) {
   }
 }
 
-function checkLongestName() {
+function playerWithLongestName() {
   let newArr = [];
   let newArrCombine = [];
   for (let gameKey in game) {
@@ -222,16 +221,12 @@ function checkLongestName() {
     return ans;
   }
   return longest_str_in_array(newArrCombine);
-  //return newArr
 }
 function getPlayer() {
   let newArr = [];
   let newArrCombine = [];
   for (let gameKey in game) {
     let teamObj = game[gameKey];
-
-    // const ab = teamObj.players;
-    // newArr.push(ab);
     const ab = Object.keys(teamObj.players);
     newArr.push(ab);
   }
@@ -245,7 +240,6 @@ function playerSteals(tamName) {
   let newArr = [];
   for (let gameKey in game) {
     let teamObj = game[gameKey];
-    // console.log(teamObj)
     let data = teamObj.teamName;
 
     if (data === tamName) {
@@ -253,7 +247,6 @@ function playerSteals(tamName) {
 
       for (let i = 0; i < ab.length; i++) {
         newArr.push(teamObj.players[ab[i]].steals);
-        //console.log(ab)
       }
     }
   }
@@ -269,7 +262,6 @@ function checkMostSteal() {
     teamNme = teamObj.teamName;
     arrTeam.push(teamNme);
   }
-  //console.log(arr)
 
   for (let i = 0; i < arrTeam.length; i++) {
     arrSteals.push(playerSteals(arrTeam[i]));
@@ -281,11 +273,63 @@ function checkMostSteal() {
 }
 
 function doesLongNameStealATon() {
-  const namePlayerLongest = checkLongestName();
+  const namePlayerLongest = playerWithLongestName();
   const statsPlayerLongest = playerStats(namePlayerLongest);
   if (statsPlayerLongest.steals === checkMostSteal()) {
     return true;
   } else {
     return false;
   }
+}
+
+function mostPointsScored() {
+  let arr = [];
+  let mostPointPlayer;
+
+  let player = getPlayer();
+  for (let i = 0; i < player.length; i++) {
+    arr.push(numPointsScored(player[i]));
+  }
+  for (let i = 0; i < player.length; i++) {
+    if (numPointsScored(player[i]) === Math.max(...arr)) {
+      arrPlayer = player[i];
+    }
+  }
+  return mostPointPlayer;
+}
+
+function findScorePointTeams(tamName) {
+  let newArr = [];
+  for (let gameKey in game) {
+    let teamObj = game[gameKey];
+    let data = teamObj.teamName;
+
+    if (data === tamName) {
+      const ab = Object.keys(teamObj.players);
+
+      for (let i = 0; i < ab.length; i++) {
+        newArr.push(teamObj.players[ab[i]].points);
+      }
+    }
+  }
+  return Math.max(...newArr);
+}
+function winningTeam() {
+  let arr = [];
+  let teamName = teamNames();
+  let winningName;
+  for (let i = 0; i < teamName.length; i++) {
+    arr.push(findScorePointTeams(teamName[i]));
+  }
+  if (arr[0] > arr[1]) {
+    arr = arr[0];
+  } else {
+    arr = arr[1];
+  }
+  for (let i = 0; i < teamName.length; i++) {
+    if (arr === findScorePointTeams(teamName[i])) {
+      winningName = teamName[i];
+    }
+  }
+  return winningName;
 }
